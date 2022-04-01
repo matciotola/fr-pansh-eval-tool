@@ -59,12 +59,13 @@ def main_metrics(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='Z-PNN',
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
-                                     description='Z-PNN is a deep learning algorithm for remote sensing '
-                                                 'imagery which performs pansharpening.',
+                                     description='Package for Full-Resolution quality assessment for pansharpening'
+                                                 'It consists of Reprojected Metrics, trying to solve the coregistration'
+                                                 'problem and a new spatial no-reference metric.',
                                      epilog='''\
     Reference: 
-    Pansharpening by convolutional neural networks in the full resolution framework
-    M. Ciotola, S. Vitale, A. Mazza, G. Poggi, G. Scarpa 
+    Full-resolution quality assessment for pansharpening
+    G. Scarpa, M. Ciotola
 
     Authors: 
     Image Processing Research Group of University Federico II of Naples 
