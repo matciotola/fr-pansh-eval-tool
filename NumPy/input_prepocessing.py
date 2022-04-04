@@ -23,7 +23,7 @@ def input_preparation(ms, pan, ratio, nbits, pad_size):
         ratio : int
             the resolution scale which elapses between MS and PAN.
         nbits : int
-            the number of bits with which the images have been codified.
+            Radiometric resolution, i.e. the number of bits with which the images have been codified.
         pad_size : int
             Parameter linked to the scope of the network. It is used to perform the padding operation
 
