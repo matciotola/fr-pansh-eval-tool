@@ -138,9 +138,6 @@ def resize_images(img_ms, img_pan, ratio, sensor=None, mtf=None, apply_mtf_to_pa
 
     h = torch.from_numpy(h).type(torch.float32)
 
-    #conv = nn.Conv2d(in_channels=b, out_channels=b, padding=math.ceil(N / 2), kernel_size=h.shape, groups=b, bias=False, padding_mode='replicate')
-    #conv.weight.data = h
-    #conv.weight.requires_grad = False
     depthconv = nn.Conv2d(in_channels=b,
                           out_channels=b,
                           groups=b,
@@ -156,7 +153,6 @@ def resize_images(img_ms, img_pan, ratio, sensor=None, mtf=None, apply_mtf_to_pa
     MS_scale = (math.floor(I_MS_LP.shape[0] / ratio), math.floor(I_MS_LP.shape[1] / ratio), I_MS_LP.shape[2])
     PAN_scale = (math.floor(img_pan.shape[0] / ratio), math.floor(img_pan.shape[1] / ratio))
 
-    #I_MS_LR = transform.resize(I_MS_LP, MS_scale, order=0)
     I_MS_LR = I_MS_LP[2::ratio, 2::ratio, :]
     if apply_mtf_to_pan:
         img_pan = np.expand_dims(img_pan, [0, 1])
