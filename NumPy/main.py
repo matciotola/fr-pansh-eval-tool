@@ -79,7 +79,7 @@ if __name__ == '__main__':
                                help='The path of the .mat file which contains the MS '
                                     'and PAN images. For more details, please refer '
                                     'to the GitHub documentation.')
-    requiredNamed.add_argument('-f', '--fused', type=str, required=True, help='The path of image pansharpened.')
+    requiredNamed.add_argument('-f', '--fused', type=str, required=True, help='The path of pansharpened image.')
 
     requiredNamed.add_argument('-s', '--sensor', type=str, required=True, choices=["WV3", "WV2", 'GE1', "QB", "IKONOS"],
                                help='The sensor that has acquired the test image. Available sensors are '
