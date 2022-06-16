@@ -1,5 +1,8 @@
 # Full-resolution quality assessment for pansharpening
-[Full-resolution quality assessment for pansharpening](https://arxiv.org/abs/2108.06144) is 
+[![arXiv](https://img.shields.io/badge/arXiv-Paper-<COLOR>.svg)](https://arxiv.org/abs/2108.06144)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f77ce04dc15b47588af0337e9d8c1032)](https://www.codacy.com/gh/matciotola/fr-pansh-eval-tool/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matciotola/fr-pansh-eval-tool&amp;utm_campaign=Badge_Grade)
+
+[Full-resolution quality assessment for pansharpening](https://www.mdpi.com/2072-4292/14/8/1808) is 
 a tool for the Full-Resolution evaluation of Pansharpening algorithms.
 
 ## Cite us
