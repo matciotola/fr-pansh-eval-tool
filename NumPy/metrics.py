@@ -82,9 +82,9 @@ def local_cross_correlation(img_1, img_2, half_width):
     sig2_ii_tot = np.clip(sig2_ii_tot, ep, sig2_ii_tot.max())
     sig2_jj_tot = np.clip(sig2_jj_tot, ep, sig2_jj_tot.max())
 
-    L = sig2_ij_tot / ((sig2_ii_tot * sig2_jj_tot) ** 0.5 + ep)
+    xcorr = sig2_ij_tot / ((sig2_ii_tot * sig2_jj_tot) ** 0.5 + ep)
 
-    return L
+    return xcorr
 
 
 def normalize_block(im):
@@ -136,22 +136,22 @@ def cayley_dickson_property_1d(onion1, onion2):
             The result of Cayley-Dickson construction on the two arrays.
     """
 
-    N = onion1.__len__()
+    n = onion1.__len__()
 
-    if N > 1:
-        L = int(N / 2)
-        a = onion1[:L]
-        b = onion1[L:]
+    if n > 1:
+        half_pos = int(n / 2)
+        a = onion1[:half_pos]
+        b = onion1[half_pos:]
 
         neg = np.ones(b.shape)
         neg[1:] = -1
 
         b = b * neg
-        c = onion2[:L]
-        d = onion2[L:]
+        c = onion2[:half_pos]
+        d = onion2[half_pos:]
         d = d * neg
 
-        if N == 2:
+        if n == 2:
             ris = np.concatenate([(a * c) - (d * b), (a * d) + (c * b)])
         else:
             ris1 = cayley_dickson_property_1d(a, c)
@@ -189,14 +189,14 @@ def cayley_dickson_property_2d(onion1, onion2):
 
     dim3 = onion1.shape[-1]
     if dim3 > 1:
-        L = int(dim3 / 2)
+        half_pos = int(dim3 / 2)
 
-        a = onion1[:, :, :L]
-        b = onion1[:, :, L:]
+        a = onion1[:, :, :half_pos]
+        b = onion1[:, :, half_pos:]
         b = np.concatenate([np.expand_dims(b[:, :, 0], -1), -b[:, :, 1:]], axis=-1)
 
-        c = onion2[:, :, :L]
-        d = onion2[:, :, L:]
+        c = onion2[:, :, :half_pos]
+        d = onion2[:, :, half_pos:]
         d = np.concatenate([np.expand_dims(d[:, :, 0], -1), -d[:, :, 1:]], axis=-1)
 
         if dim3 == 2:
@@ -322,9 +322,6 @@ def Q2n(outputs, labels, q_block_size=32, q_shift=32):
         q2n_index_map : Numpy Array
             The Q2n map, on a support of (q_block_size, q_block_size)
     """
-
-    height, width, depth = labels.shape
-    o_height, o_width, _ = outputs.shape
 
     height, width, depth = labels.shape
     stepx = ceil(height / q_shift)
