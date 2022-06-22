@@ -1,9 +1,9 @@
 import argparse
 from metrics import ReproMetrics, DRho
 
+
 def main_metrics(args):
     from scipy import io
-    import torch
     import os
 
     test_path = args.input
@@ -11,24 +11,18 @@ def main_metrics(args):
     sensor = args.sensor
     ratio = args.ratio
     out_dir = args.out_dir
-    gpu_number = str(args.gpu_number)
-    use_cpu = args.use_cpu
+
     save_outputs_flag = args.save_outputs
     show_results_flag = args.show_results
-
-    os.environ["CUDA_VISIBLE_DEVICES"] = gpu_number
-    device = torch.device("cuda" if torch.cuda.is_available() and not use_cpu else "cpu")
 
     to_fuse = io.loadmat(test_path)
     outputs = io.loadmat(fused_path)['I_MS'].astype('float32')
 
-    I_PAN = to_fuse['I_PAN'].astype('float32')
-    I_MS = to_fuse['I_MS_LR'].astype('float32')
+    pan = to_fuse['I_PAN'].astype('float32')
+    ms = to_fuse['I_MS_LR'].astype('float32')
 
-    nbands = I_MS.shape[-1]
-
-    r_q2n, r_q, r_sam, r_ergas = ReproMetrics(outputs, I_MS, I_PAN, sensor, ratio, 32, 32)
-    D_rho = DRho(outputs, I_PAN, ratio)
+    r_q2n, r_q, r_sam, r_ergas = ReproMetrics(outputs, ms, pan, sensor, ratio, 32, 32)
+    d_rho = DRho(outputs, pan, ratio)
 
     if save_outputs_flag:
         io.savemat(
@@ -38,7 +32,7 @@ def main_metrics(args):
                 'ReproERGAS': r_ergas,
                 'ReproSAM': r_sam,
                 'ReproQ': r_q,
-                'D_rho': D_rho,
+                'D_rho': d_rho,
             }
         )
 
@@ -47,11 +41,11 @@ def main_metrics(args):
               "ReproSAM    %.5f \n"
               "ReproQ:     %.5f \n"
               "Drho:       %.5f"
-              % (r_q2n, r_ergas, r_sam, r_q, D_rho))
+              % (r_q2n, r_ergas, r_sam, r_q, d_rho))
 
         if show_results_flag:
             from show_results import show
-            show(I_MS, I_PAN, outputs, ratio, "Outcomes")
+            show(ms, pan, outputs, ratio, "Outcomes")
 
         return
 
@@ -60,7 +54,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='Z-PNN',
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description='Package for Full-Resolution quality assessment for pansharpening'
-                                                 'It consists of Reprojected Metrics, trying to solve the coregistration'
+                                                 'It consists of Reprojected Metrics, trying to solve the '
+                                                 'coregistration '
                                                  'problem and a new spatial no-reference metric.',
                                      epilog='''\
     Reference: 
@@ -88,12 +83,6 @@ if __name__ == '__main__':
     default_out_path = 'Outputs/'
     optional.add_argument("-o", "--out_dir", type=str, default=default_out_path,
                           help='The directory in which save the outcome.')
-
-    optional.add_argument('-n_gpu', "--gpu_number", type=int, default=0, help='Number of the GPU on which perform the '
-                                                                              'algorithm.')
-    optional.add_argument("--use_cpu", action="store_true",
-                          help='Force the system to use CPU instead of GPU. It could solve OOM problems, but the '
-                               'algorithm will be slower.')
     optional.add_argument("--save_outputs", action="store_true",
                           help='Save the results in a .mat file. Please, use out_dir flag to indicate where to save.')
 
