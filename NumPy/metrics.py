@@ -434,7 +434,7 @@ def SAM(outputs, labels):
     norm_product[norm_product == 0] = np.nan
     scalar_product = scalar_product.flatten()
     norm_product = norm_product.flatten()
-    angle = np.sum(np.arccos(np.clip(scalar_product / norm_product, a_min=-1, a_max=1)), axis=-1) / norm_product.shape[0]
+    angle = np.nansum(np.arccos(np.clip(scalar_product / norm_product, a_min=-1, a_max=1)), axis=-1) / norm_product.shape[0]
     angle = angle * 180 / np.pi
 
     return angle
